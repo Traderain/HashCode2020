@@ -2,21 +2,38 @@
 
 def main():
     lines = []
-    with open('./Pizza/a_example.in') as f:
+
+    fp = './Pizza/a_example'
+
+
+    with open(fp + '.in') as f:
         lines = f.readlines()
 
     split0 = lines[0].split(' ')
     max = split0[0]
     typelimit = split0[1]
 
-    pizzatypes = lines[1].split(' ')
+    pizzatypes = lines[1].strip().split(' ')
+
+
     
     # Driver program to test above function 
-    val = [1, 2, 3, 4] 
-    wt = [1, 2, 3, 4]
-    W = 100
+    val = [] 
+    wt = []
+    for idx in range(0, len(pizzatypes)):
+        val.append(int(pizzatypes[idx]))
+        wt.append(int(pizzatypes[idx]))
+    W = int(max)
     n = len(val) 
-    print(knapSack(W, wt, val, n)) 
+    ret = knapSack(W, wt, val, n)
+    with open(fp + '.out', 'w') as fo:
+        fo.write(str(len(ret)) + "\n")
+        for i in range(0, len(ret)):
+            for j in range(0, len(pizzatypes)):
+                if pizzatypes[j] == ret[i]:
+                    fo.write(str(j) + " ")
+
+        fo.write("\n")
 
     
 
@@ -52,14 +69,10 @@ def knapSack(W, wt, val, n):
                     asd[i][w].append(item)
                 K[i][w] = K[i-1][w] 
   
-    return K[n][W]
+    lower = len(asd)
+    upper = len(asd[0])
+    return asd[lower-1][upper-1]
 
 if __name__ == "__main__":
     main()
-
-def formatoutput(pizzas):
-    print(len(pizzas) + "\n")
-    for i in range(0, len(pizzas)):
-        print(i + " ")
-    print("\n")
 

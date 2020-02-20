@@ -16,7 +16,7 @@ class Library:
 
     # Fitness of the library
     def fitness(self):
-        return  self.ship * self.bookcount * ( 1 / self.signuplen)
+        return  self.ship * ( 1 / (self.signuplen))
 
     # Returns the books it sends for x days
     def getbook(self, fordays):
@@ -56,6 +56,15 @@ class ShippingSchedule:
 
     def __init__(self):
         self.sends = list()
+
+    def calcscore(self):
+        allbooks = list()
+        for i in range(0, len(self.sends)):
+            cbooks = self.sends[i][1]
+            for j in range(0, len(cbooks)):
+                allbooks.append(cbooks[j])
+        allbooks_dist = list(set(allbooks))
+        print("Score: " + str(sum(allbooks_dist)))
     
     def printtofile(self, path):
         with open(path, 'w') as f:
@@ -75,55 +84,61 @@ class ShippingSchedule:
 
 def main():
     lines = []
+    for fp in ['a_example.in',
+             'b_read_on.in',
+             'c_incunabula.in',
+             'd_tough_choices.in',
+             'e_so_many_books.in',
+             'f_libraries_of_the_world.in']:
 
-    fp = './b_read_on.in'
 
+        with open(fp) as f:
+            lines = f.readlines()
 
-    with open(fp) as f:
-        lines = f.readlines()
+        split0 = lines[0].split(' ')
 
-    split0 = lines[0].split(' ')
+        sch = Schedule()
 
-    sch = Schedule()
+        # Read basics
+        sch.bookcount = int(split0[0].strip())
+        libs = int(split0[1].strip())
+        sch.days = int(split0[2].strip())
 
-    # Read basics
-    sch.bookcount = int(split0[0].strip())
-    libs = int(split0[1].strip())
-    sch.days = int(split0[2].strip())
+        for i in lines[1].split(' '):
+            sch.book_score.append(int(i.strip()))
 
-    for i in lines[1].split(' '):
-        sch.book_score.append(int(i.strip()))
+        for i in range(0, int(libs)):
+            linenum = 1 + i*2 + 1
+            
+            l = Library()
+            l.id = i
+            lsplit = lines[linenum].split(' ')
+            l.bookcount = int(lsplit[0].strip())
+            l.signuplen = int(lsplit[1].strip())
+            l.ship = int(lsplit[2].strip())
 
-    for i in range(0, int(libs)):
-        linenum = 1 + i*2 + 1
+            for book in lines[linenum+1].split(' '):
+                l.books.append(int(book.strip()))
+            sch.libs.append(l)
+        ss = ShippingSchedule()
+
+        sch.libs.sort(key = (lambda a : a.fitness()))
         
-        l = Library()
-        l.id = i
-        lsplit = lines[linenum].split(' ')
-        l.bookcount = int(lsplit[0].strip())
-        l.signuplen = int(lsplit[1].strip())
-        l.ship = int(lsplit[2].strip())
+        done = False
+        iter = 0
+        currdays = 0
 
-        for book in lines[linenum+1].split(' '):
-            l.books.append(int(book.strip()))
-        sch.libs.append(l)
-    ss = ShippingSchedule()
-
-    sch.libs.sort(key = (lambda a : a.fitness()))
-    
-    done = False
-    iter = 0
-    currdays = 0
-
-    while not done and iter < len(sch.libs):
-        elem = sch.libs[iter]
-        if elem.signuplen + currdays < sch.days:
-            ss.sends.append(elem.toSchippingSchedule(sch.days - (currdays + elem.signuplen)))
-            currdays = currdays + elem.signuplen
-            iter = iter + 1
-        else:
-            done = True
-    ss.printtofile(fp + '.out')
+        while not done and iter < len(sch.libs):
+            elem = sch.libs[iter]
+            if elem.signuplen + currdays < sch.days:
+                ss.sends.append(elem.toSchippingSchedule(sch.days - (currdays + elem.signuplen)))
+                currdays = currdays + elem.signuplen
+                iter = iter + 1
+            else:
+                done = True
+        print("Wokring on " + fp + "...")
+        ss.calcscore()
+        ss.printtofile(fp + '.out')
 
 
 

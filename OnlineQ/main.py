@@ -6,6 +6,13 @@ class Library:
     ship = 0
     books = list()
 
+    def __init__(self):
+        self.bookcount = 0
+        self.signuplen = 0
+        self.ship = 0
+        self.books = list()
+
+
 
 class Schedule:
     book_score = list()
@@ -14,11 +21,18 @@ class Schedule:
     scores = list()
     libs = list()
 
+    def __init__(self):
+        self.book_score = list()
+        self.bookcount = 0
+        self.days = 0
+        self.scores = list()
+        self.libs = list()
+
 
 def main():
     lines = []
 
-    fp = './a_example'
+    fp = './f_libraries_of_the_world'
 
 
     with open(fp + '.in') as f:
@@ -29,24 +43,24 @@ def main():
     sch = Schedule()
 
     # Read basics
-    sch.bookcount = split0[0]
-    libs = split0[1]
-    sch.days = split0[2]
+    sch.bookcount = int(split0[0].strip())
+    libs = int(split0[1].strip())
+    sch.days = int(split0[2].strip())
 
     for i in lines[1].split(' '):
-        sch.book_score.append(i)
+        sch.book_score.append(int(i.strip()))
 
     for i in range(0, int(libs)):
         linenum = 1 + i*2 + 1
         
         l = Library()
         lsplit = lines[linenum].split(' ')
-        l.bookcount = int(lsplit[0])
-        l.signuplen = int(lsplit[1])
-        l.ship = int(lsplit[2])
+        l.bookcount = int(lsplit[0].strip())
+        l.signuplen = int(lsplit[1].strip())
+        l.ship = int(lsplit[2].strip())
 
         for book in lines[linenum+1].split(' '):
-            l.books.append(int(book))
+            l.books.append(int(book.strip()))
         sch.libs.append(l)
     print('Meme')
 

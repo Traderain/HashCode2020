@@ -63,10 +63,15 @@ class ShippingSchedule:
             f.write(str(len(self.sends)) + "\n")
 
             for i in range(0, len(self.sends)):
-                f.write(str(self.sends[i][0]) + " ")
-                for j in range(0, len(self.sends[i][1])):
-                    f.write(str(self.sends[i][1][j]) + " ")
-                f.write("\n")                
+                currlib = self.sends[i]
+                ## Write ID
+                f.write(str(currlib[0]) + " " + str(len(currlib[1])) + "\n")
+                currlib_books = self.sends[i][1]
+                for j in range(0, len(currlib_books)):
+                    f.write(str(currlib_books[j]))
+                    if j != len(currlib_books):
+                        f.write(" ")
+                f.write("\n")           
 
 def main():
     lines = []

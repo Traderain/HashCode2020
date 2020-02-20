@@ -32,10 +32,10 @@ class Schedule:
 def main():
     lines = []
 
-    fp = './f_libraries_of_the_world'
+    fp = './a_example.in'
 
 
-    with open(fp + '.in') as f:
+    with open(fp) as f:
         lines = f.readlines()
 
     split0 = lines[0].split(' ')

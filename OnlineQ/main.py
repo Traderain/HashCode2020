@@ -71,7 +71,7 @@ class ShippingSchedule:
 def main():
     lines = []
 
-    fp = './a_example.in'
+    fp = './b_read_on.in'
 
 
     with open(fp) as f:
@@ -105,24 +105,22 @@ def main():
     ss = ShippingSchedule()
 
     sch.libs.sort(key = (lambda a : a.fitness()))
+    
     done = False
     iter = 0
     currdays = 0
-    while not done:
+
+    while not done and iter < len(sch.libs):
         elem = sch.libs[iter]
         if elem.signuplen + currdays < sch.days:
             ss.sends.append(elem.toSchippingSchedule(sch.days - (currdays + elem.signuplen)))
             currdays = currdays + elem.signuplen
+            iter = iter + 1
         else:
             done = True
-    ss.printtofile('test.out')
+    ss.printtofile(fp + '.out')
 
 
-
-
-
-
-    
 
 if __name__ == "__main__":
     main()

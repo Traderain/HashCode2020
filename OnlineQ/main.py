@@ -1,4 +1,4 @@
-
+import io
 
 class Library:
     bookcount = 0
@@ -11,6 +11,11 @@ class Library:
         self.signuplen = 0
         self.ship = 0
         self.books = list()
+
+    def fitness(self):
+        return  self.ship * self.bookcount * ( 1 / self.signuplen)
+
+
 
 
 
@@ -28,6 +33,23 @@ class Schedule:
         self.scores = list()
         self.libs = list()
 
+class ShippingSchedule:
+
+    sends = list()
+
+    def __init__(self):
+        self.sends = list()
+    
+    def printtofile(self, path):
+        with open(path, 'w') as f:
+            # Library count
+            f.write(str(len(self.sends)) + "\n")
+
+            for i in range(0, len(self.sends)):
+                f.write(str(self.sends[i][0]) + " ")
+                for j in range(0, len(self.sends[i][1])):
+                    f.write(str(self.sends[i][1][j]) + " ")
+                f.write("\n")                
 
 def main():
     lines = []
@@ -63,6 +85,17 @@ def main():
             l.books.append(int(book.strip()))
         sch.libs.append(l)
     print('Meme')
+    ss = ShippingSchedule()
+
+    vals = list()
+    vals.append(0)
+    vals.append(1)
+    vals.append(2)
+    ss.sends.append((0,vals))
+    ss.sends.append((0,vals))
+    ss.sends.append((0,vals))
+
+    ss.printtofile('test.out')
 
 
 
